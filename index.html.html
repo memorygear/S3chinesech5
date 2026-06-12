@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《人間有情》互動學習站 - 地獄級測驗 (雲端智能鎖版)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Noto Sans CJK TC", "Microsoft JhengHei", sans-serif;
+            background: linear-gradient(135deg, #fafaf8 0%, #f5f0e8 100%);
+            color: #2c3e50;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #87ceeb 0%, #e6d5f0 100%);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(135, 206, 235, 0.15);
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        header p {
+            color: #555;
+            font-size: 1rem;
+        }
+
+        /* Navigation & Student Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .student-info {
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Voice Status Banner */
+        .voice-diagnostic {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: #2e7d32;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .nav-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #87ceeb;
+            background: white;
+            color: #87ceeb;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #87ceeb;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(135, 206, 235, 0.3);
+        }
+
+        .nav-btn.active {
+            background: #87ceeb;
+            color: white;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Login System Section */
+        #loginSection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .login-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(135, 206, 235, 0.25);
+            width: 100%;
+            max-width: 450px;
+            border-top: 6px solid #87ceeb;
+        }
+
+        .login-card h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .login-card p.subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+            color: #2c3e50;
+        }
+
+        .form-control:focus {
+            border-color: #87ceeb;
+            box-shadow: 0 0 0 3px rgba(135, 206, 235, 0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #87ceeb, #e6d5f0);
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            box-shadow: 0 4px 10px rgba(135, 206, 235, 0.2);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(135, 206, 235, 0.3);
+        }
+
+        .login-error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: none;
+            border-left: 4px solid #f44336;
+            animation: shake 0.3s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Universal One-Click Text Reader Box */
+        .universal-speech-panel {
+            background: #fdfaf6;
+            border: 2px solid #ffb6c1;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px rgba(255, 182, 193, 0.15);
+        }
+
+        .universal-speech-panel h3 {
+            color: #db7093;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.2rem;
+        }
+
+        .universal-speech-panel p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+        }
+
+        .universal-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .universal-textarea {
+            width: 100%;
+            height: 90px;
+            border: 2px solid #ebd3e0;
+            border-radius: 8px;
+            padding: 0.8rem;
+            font-size: 0.95rem;
+            resize: none;
+            outline: none;
+            font-family: inherit;
+            color: #2c3e50;
+            transition: border-color 0.3s;
+        }
+
+        .universal-textarea:focus {
+            border-color: #ffb6c1;
+            box-shadow: 0 0 0 3px rgba(255, 182, 193, 0.2);
+        }
+
+        .universal-speech-btn-group {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        /* Sections */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Section 1: 課文重點 */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .highlight-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #87ceeb;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .highlight-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(135, 206, 235, 0.15);
+        }
+
+        .highlight-card h3 {
+            color: #87ceeb;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .highlight-card p {
+            color: #555;
+            line-height: 1.8;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-card ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .highlight-card li {
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        /* TTS Audio Buttons Styling */
+        .tts-btn {
+            background: #f0f8ff;
+            border: 1.5px solid #87ceeb;
+            color: #87ceeb;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            align-self: flex-start;
+            margin-top: auto;
+        }
+
+        .tts-btn:hover {
+            background: #87ceeb;
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .tts-btn.speaking {
+            background: #ffb6c1;
+            border-color: #ffb6c1;
+            color: white;
+            animation: speakingPulse 1.5s infinite;
+        }
+
+        @keyframes speakingPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 182, 193, 0.4); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(255, 182, 193, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 182, 193, 0); }
+        }
+
+        .section-image {
+            width: 100%;
+            max-width: 800px;
+            margin: 2rem auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Section 2: 問答庫 */
+        .accordion {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .accordion-item:last-child {
+            border-bottom: none;
+        }
+
+        .accordion-header {
+            padding: 1.2rem;
+            background: #f9f9f9;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .accordion-header:hover {
+            background: #f0f8ff;
+            color: #87ceeb;
+        }
+
+        .accordion-header.active {
+            background: #e6d5f0;
+            color: #2c3e50;
+        }
+
+        .accordion-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-header.active .accordion-toggle {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: white;
+        }
+
+        .accordion-content.active {
+            max-height: 500px;
+        }
+
+        .accordion-body {
+            padding: 1.2rem;
+            color: #555;
+            line-height: 1.8;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Section 3: 互動小測驗 */
+        .quiz-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Stage Selection */
+        .stage-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stage-card {
+            background: linear-gradient(135deg, #87ceeb 0%, #e6d5f0 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 4px 12px rgba(135, 206, 235, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(135, 206, 235, 0.3);
+        }
+
+        .stage-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-card p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .stage-card.completed {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+        }
+
+        .stage-status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.25);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* Quiz Content */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e8e8e8;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #87ceeb, #e6d5f0);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e8e8e8;
+        }
+
+        .quiz-progress {
+            font-size: 1rem;
+            color: #87ceeb;
+            font-weight: 600;
+        }
+
+        .stage-label {
+            font-size: 0.9rem;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .quiz-question-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-question {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .quiz-option:hover:not(.disabled) {
+            border-color: #87ceeb;
+            background: #f0f8ff;
+            transform: translateY(-2px);
+        }
+
+        .quiz-option.selected {
+            border-color: #87ceeb;
+            background: #e6d5f0;
+        }
+
+        .quiz-option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .quiz-option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .quiz-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .quiz-feedback {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            font-weight: 600;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 4px solid #4caf50;
+        }
+
+        .quiz-feedback.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 4px solid #f44336;
+        }
+
+        .quiz-analysis {
+            background: #f0f8ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: none;
+            border-left: 4px solid #87ceeb;
+        }
+
+        .quiz-analysis.show {
+            display: block;
+        }
+
+        .quiz-analysis h4 {
+            color: #87ceeb;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .quiz-analysis p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #87ceeb, #ffb6c1);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(135, 206, 235, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f0f8ff;
+            color: #87ceeb;
+            border: 2px solid #87ceeb;
+        }
+
+        .btn-secondary:hover {
+            background: #87ceeb;
+            color: white;
+        }
+
+        /* Results & Report */
+        .results-card {
+            background: linear-gradient(135deg, #87ceeb 0%, #e6d5f0 100%);
+            padding: 2.5rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(135, 206, 235, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .results-card h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .results-score {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .results-percentage {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        .results-message {
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.2rem;
+            border-radius: 10px;
+        }
+
+        .results-action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 600px) {
+            .results-action-group {
+                flex-direction: row;
+                justify-content: center;
+                max-width: none;
+            }
+        }
+
+        /* Report Section */
+        .report-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .report-section h3 {
+            color: #87ceeb;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #87ceeb;
+            padding-bottom: 0.5rem;
+        }
+
+        .report-header-box {
+            background: #faf8fc;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #e6d5f0;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .report-card {
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #87ceeb;
+            transition: transform 0.2s;
+        }
+
+        .report-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .report-card h4 {
+            color: #2c3e50;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-card p {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .category-analysis {
+            background: #f0f8ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .category-analysis h4 {
+            color: #87ceeb;
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+        }
+
+        .category-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-name {
+            width: 200px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .category-progress {
+            flex: 1;
+            height: 24px;
+            background: #e8e8e8;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-right: 1rem;
+            min-width: 150px;
+        }
+
+        .category-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #87ceeb, #e6d5f0);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: width 0.6s ease;
+        }
+
+        .category-score {
+            width: 60px;
+            text-align: right;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .suggestion-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .suggestion-box h4 {
+            color: #856404;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .suggestion-box p {
+            color: #856404;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .suggestion-box ul {
+            margin-left: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .suggestion-box li {
+            color: #856404;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        /* Detailed Q&A Analysis Board */
+        .detailed-analysis-board {
+            margin-top: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .detailed-analysis-board h3 {
+            color: #e6d5f0;
+            background: #2c3e50;
+            padding: 1rem;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 0;
+            font-size: 1.2rem;
+        }
+
+        .detailed-list {
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            padding: 1.5rem;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .detailed-item {
+            padding: 1rem 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .detailed-item:last-child {
+            border-bottom: none;
+        }
+
+        .detailed-item-q {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .detailed-item-ans-line {
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .text-correct {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .text-incorrect {
+            color: #c62828;
+            font-weight: bold;
+        }
+
+        .detailed-item-exp {
+            background: #f9f9f9;
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.5rem;
+            border-left: 3px solid #ccc;
+        }
+
+        /* Smart Cloud Lock Layout Overlays */
+        #cloudLockScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            z-index: 999999;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: white;
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            max-width: 480px;
+            width: 100%;
+            border-top: 6px solid #e6d5f0;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .lock-icon-lg {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .lock-box h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .lock-box p {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Admin Console Dialog */
+        #adminConsoleModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .admin-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            max-width: 450px;
+            width: 100%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .admin-box h3 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid #87ceeb;
+            padding-bottom: 0.5rem;
+        }
+
+        .admin-toggle-switch-card {
+            background: #f7f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .admin-toggle-btn {
+            width: 100%;
+            padding: 0.8rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .highlights-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                gap: 0.5rem;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 1rem;
+            }
+
+            .nav-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .stage-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .report-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-name {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .quiz-question-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .quiz-question-container .tts-btn {
+                align-self: flex-start;
+            }
+
+            .universal-speech-btn-group {
+                flex-direction: column;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Enlarge touch area for mobile */
+        .footer-lock-icon {
+            cursor: pointer;
+            color: #ccc;
+            font-size: 1.3rem;
+            padding: 8px;
+            transition: color 0.2s, transform 0.2s;
+            display: inline-block;
+        }
+
+        .footer-lock-icon:hover {
+            color: #87ceeb;
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body>
+    <!-- 雲端智能鎖定覆蓋畫面 (普通學生被鎖時看到此處) -->
+    <div id="cloudLockScreen">
+        <div class="lock-box">
+            <div class="lock-icon-lg">🔒</div>
+            <h2>互動學習站未開放</h2>
+            <p>本互動學習站目前處於私密鎖定狀態，不對外開放。如果您是本班同學，請留意課堂中文科老師的最新安排。</p>
+            <div class="results-action-group">
+                <button class="btn btn-primary" onclick="tryFamilyBypass()">🔑 家人/兒子專屬通道</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 管理員控制面板 Dialog -->
+    <div id="adminConsoleModal">
+        <div class="admin-box">
+            <h3>⚙️ 雲端智能鎖控制台</h3>
+            
+            <div class="admin-toggle-switch-card">
+                <label style="font-weight:bold; color:#4a5568; font-size:0.9rem;">當前雲端發布狀態：</label>
+                <div style="font-size:1.15rem; margin-top:0.4rem; font-weight:bold; display:flex; align-items:center; gap:6px;">
+                    <span id="adminStatusIndicator">載入中...</span>
+                </div>
+                <button class="admin-toggle-btn" id="adminToggleBtn" onclick="toggleCloudLockStatus()">切換狀態</button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="font-weight:bold; color:#4a5568; font-size:0.9rem;">自訂管理員密碼：</label>
+                <input type="text" id="adminPassInput" class="form-control" style="padding:0.5rem;" placeholder="預設 admin888">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1rem;">
+                <label style="font-weight:bold; color:#4a5568; font-size:0.9rem;">自訂家人/兒子通道密碼：</label>
+                <input type="text" id="familyPassInput" class="form-control" style="padding:0.5rem;" placeholder="預設 son123">
+            </div>
+
+            <div style="display:flex; gap:0.5rem; margin-top:1.5rem;">
+                <button class="btn btn-primary" onclick="saveAdminSettings()">儲存並更新雲端 💾</button>
+                <button class="btn btn-secondary" onclick="closeAdminConsole()">關閉面板</button>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <h1>《人間有情》互動學習站</h1>
+        <p>中三級中文科 - 地獄級 40 題完整題庫 (雲端智能鎖修復版)</p>
+    </header>
+
+    <div class="container">
+        <!-- 登入卡片區域 -->
+        <div id="loginSection">
+            <div class="login-card">
+                <h2>學生登入</h2>
+                <p class="subtitle">香港中三級中文科《人間有情》學習平台</p>
+                
+                <div class="login-error" id="loginError">請填寫所有必填欄位！</div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="studentName">學生姓名 *</label>
+                        <input type="text" id="studentName" class="form-control" placeholder="例如：陳大文" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentClass">就讀班別 *</label>
+                        <select id="studentClass" class="form-control" required>
+                            <option value="3A">中三 A 班 (3A)</option>
+                            <option value="3B" selected>中三 B 班 (3B)</option>
+                            <option value="3C">中三 C 班 (3C)</option>
+                            <option value="3D">中三 D 班 (3D)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentNo">學號 (例如: 15) *</label>
+                        <input type="number" id="studentNo" class="form-control" placeholder="請輸入學號數字" min="1" max="50" required>
+                    </div>
+                    <button type="submit" class="login-btn">解鎖並進入學習站 🔑</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 核心系統區域 (預設隱藏) -->
+        <div id="mainContent" style="display: none;">
+            <div class="top-bar">
+                <div class="student-info" id="studentWelcome"></div>
+                <!-- 語音診斷狀態條 -->
+                <div class="voice-diagnostic" id="voiceDiagBox">
+                    <span>📢 語音引擎狀態：</span>
+                    <strong id="voiceStatusLabel">初始化中...</strong>
+                    <button onclick="testVoiceEngine()" style="margin-left: auto; background: #2e7d32; color: white; border: none; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; font-weight: bold;">一鍵測試發聲 🔊</button>
+                </div>
+                <button class="btn btn-secondary" id="logoutBtn" onclick="handleLogout()" style="flex: none; padding: 0.5rem 1rem; font-size: 0.9rem; margin-top: 0.5rem;">安全登出 🚪</button>
+            </div>
+
+            <!-- 萬能一鍵朗讀區 -->
+            <div class="universal-speech-panel">
+                <h3>🔊 萬能廣東話朗讀器（貼上即讀）</h3>
+                <p>將任何外面網頁、新聞或電子書複製過來的文字貼在下方，一按即可用廣東話讀出！</p>
+                <div class="universal-input-group">
+                    <textarea id="universalTextarea" class="universal-textarea" placeholder="在此貼上或輸入你想要朗讀的任何中文字句..."></textarea>
+                    <div class="universal-speech-btn-group">
+                        <button class="btn btn-primary" id="universalSpeakBtn" onclick="speakUniversalText()" style="flex: 2;">🔊 開始廣東話朗讀</button>
+                        <button class="btn btn-secondary" onclick="clearUniversalText()" style="flex: 1;">🧹 清除文字</button>
+                    </div>
+                </div>
+            </div>
+
+            <nav>
+                <button class="nav-btn active" id="nav-highlights" onclick="switchSection('highlights')">📖 課文重點整理</button>
+                <button class="nav-btn" id="nav-qa" onclick="switchSection('qa')">❓ 課文問答庫</button>
+                <button class="nav-btn" id="nav-quiz" onclick="switchSection('quiz')">🎯 互動小測驗</button>
+            </nav>
+
+            <!-- Section 1: 課文重點 -->
+            <div id="highlights" class="section active">
+                <div class="section-image">
+                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/human_warmth_theme-f7cJ6W4GCvPjSL9kyEu4qp.webp" alt="人間有情主題插圖">
+                </div>
+                <div class="highlights-grid">
+                    <div class="highlight-card">
+                        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/umbrella_shop_scene-o4mu6KsBYJBvrwpXbFUghS.webp" alt="梁蘇記遮廠店鋪場景">
+                        <h3>📚 課文背景</h3>
+                        <p id="txt-bg">杜國威所撰寫的《人間有情》是八十年代的巔峰代表作，深刻探討人與人之間逐漸流失的「人情味」與傳統文化美德。故事取材自具備百年歷史的「梁蘇記遮廠」，時間跨度自晚清廣州、抗日戰爭時期的澳門，一路延伸至一九六〇年代後期的香港德輔道中門市。</p>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-bg', this)">🔊 廣東話朗讀</button>
+                    </div>
+
+                    <div class="highlight-card">
+                        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/tian_ci_chen_ying_meeting-V6HH2QrbYs9Sqey4n7uYLx.webp" alt="天賜與陳盈初次相見">
+                        <h3>🎭 戲劇結構</h3>
+                        <p id="txt-structure">本劇為典型的三幕劇，遵循古典戲劇之「開端、發展、高潮、結局」四階段進行情節推進。課文節錄部分共有四十八段，聚焦於第一幕中「蘇記遮廠」少東梁天賜與炮仗廠千金陳盈初次會面及訂親的經典情節。</p>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-structure', this)">🔊 廣東話朗讀</button>
+                    </div>
+
+                    <div class="highlight-card">
+                        <h3>🎨 核心人物</h3>
+                        <div id="txt-characters">
+                            <ul>
+                                <li><strong>梁天賜</strong>：木訥、謙厚、順從天命的傳統孝子，性格內向、反應遲緩。</li>
+                                <li><strong>陳盈</strong>：坦率直言、極具主見的現代女性，敢作敢為、積極主動。</li>
+                                <li><strong>梁昌華</strong>：天賜與陳盈的兒子，全劇旁白與敘述者。</li>
+                            </ul>
+                        </div>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-characters', this)">🔊 廣東話朗讀</button>
+                    </div>
+
+                    <div class="highlight-card">
+                        <h3>💬 語帶雙關</h3>
+                        <p id="txt-pun">天賜與陳盈在遮廠內的對話表面談傘，實則談情。「永久包修，保用一世」不僅是商業承諾，更是天賜對陳盈的終身婚姻承諾。「就算是一把傘，也要挑自己喜歡的」暗示婚姻對象必須由自己挑選。</p>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-pun', this)">🔊 廣東話朗讀</button>
+                    </div>
+
+                    <div class="highlight-card">
+                        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/umbrella_craftsmanship-VnfqUawtppAbaaqTVhuLMS.webp" alt="傳統製傘工藝">
+                        <h3>📖 寫作手法</h3>
+                        <div id="txt-methods">
+                            <ul>
+                                <li><strong>對比手法</strong>：天賜的木訥與陳盈的爽朗形成張力。</li>
+                                <li><strong>心理描寫</strong>：深刻勾勒角色內心的矛盾與掙扎。</li>
+                                <li><strong>對話描寫</strong>：極具日常人情味並反映性格潛台詞。</li>
+                                <li><strong>舞台說明</strong>：靈活動用環境、道具、燈光與音效。</li>
+                            </ul>
+                        </div>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-methods', this)">🔊 廣東話朗讀</button>
+                    </div>
+
+                    <div class="highlight-card">
+                        <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/rainy_day_umbrella-V9R24UPFMPsqgbBD2PAeTS.webp" alt="雨傘與人情味">
+                        <h3>❤️ 主題精神</h3>
+                        <p id="txt-theme">本劇展現了父母對子女的關愛之情與男女間的真摯愛情。藉由遮廠的興衰史，體現現代社會逐漸消失的「人情味」以及人與人之間的道義與溫情。「知否家中常盼望，莫因風雨誤歸期」充滿濃厚的溫暖人情味。</p>
+                        <button class="tts-btn" onclick="toggleSpeech('txt-theme', this)">🔊 廣東話朗讀</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: 問答庫 -->
+            <div id="qa" class="section">
+                <div class="section-image">
+                    <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663739482511/7ivURDgdteau6uBw5zRY2E/tian_ci_chen_ying_meeting-V6HH2QrbYs9Sqey4n7uYLx.webp" alt="天賜與陳盈相見場景">
+                </div>
+                <div class="accordion" id="accordion">
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>1. 梁蘇夫婦正為兒子天賜作甚麼打算？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-1">
+                                    <strong>答案：</strong>梁蘇夫婦正計劃娶炮仗廠東主陳勝的女兒為兒媳婦，期望為年滿十九歲的長子天賜成家立室。<br><br>
+                                    <strong>學術評析：</strong>這奠定了全劇家庭觀念與傳統婚俗的開端，展現了傳統社會中父母對子女婚姻的重視與安排。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-1', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>2. 假如跟陳家成為姻親，梁蘇擔心會發生甚麼事情？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-2">
+                                    <strong>答案：</strong>梁蘇指出，陳家製炮仗「盼天晴」，而梁家造傘「望下雨」，兩家生意的核心期盼截然相反。他擔憂兩家在生活與商業理念上「水火不相容」，日後難以和諧相處，甚至引發兩家不和。<br><br>
+                                    <strong>學術評析：</strong>行業意象的對立，是編劇用以製造戲劇張力的第一層客觀阻礙，體現了傳統社會中對商業命運的迷信與執著。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-2', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>3. 對於父母安排的婚姻，陳家小姐為甚麼「大發脾氣，又吵又鬧」？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-3">
+                                    <strong>答案：</strong>因為陳盈接受了現代思想，強烈反對沒有感情基礎、封建傳統的「盲婚啞嫁」，渴望爭取自己的「擇偶自主」與婚姻自由。<br><br>
+                                    <strong>學術評析：</strong>展現新舊時代思想交替之際，青年女性的自我覺醒與反叛性格，是劇作的重要社會意義所在。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-3', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>4. 梁蘇夫婦為甚麼對陳盈的到訪感到「如臨大敵，手忙腳亂」？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-4">
+                                    <strong>答案：</strong>因為在當時保守的社會風氣中，未婚女子主動登門拜訪相親對象極為罕見、反傳統。梁蘇夫婦震驚之餘，深恐招待不周或禮儀失當，會誤了天賜的終身姻緣。<br><br>
+                                    <strong>學術評析：</strong>反映了傳統大家長面對現代非傳統行為時的集體心理恐慌，突出了社會風氣的轉變。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-4', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>5. 天賜在等待陳盈和剛見到陳盈時，有甚麼反應？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-5">
+                                    <strong>答案：</strong>天賜表現得極其緊張、害羞、反應遲緩且木訥。當被陳盈從頭到腳打量時，他感到無比難為情，滿面通紅，心如鹿撞，顯得拙於言辭。<br><br>
+                                    <strong>學術評析：</strong>透過生理與行動細節，具體勾勒出天賜純樸、內向、不擅交際的純真性格，與陳盈形成鮮明對比。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-5', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>6. 第17段中天賜對陳盈說的話有甚麼用意？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-6">
+                                    <strong>答案：</strong>天賜所言的「隨便看看，看看——合不合用？」語帶雙關，表面指看傘，實指看人。其用意在於委婉地打破現場尷尬、窒悶的氣氛，引導對話，同時隱晦地向陳盈表明自己就是聯姻對象「天賜」。<br><br>
+                                    <strong>學術評析：</strong>展現天賜在極度害羞中，依然努力展現紳士風度與得體言談的教養。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-6', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>7. 根據第25至29段的內容，陳盈的情緒出現了哪些變化？她為甚麼有此變化？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-7">
+                                    <strong>答案：</strong>陳盈的情緒經歷了「生氣（微嗔）」到「更加氣憤」，最後「化怒為喜（芳心暗喜）」的軌跡。起初，她因天賜順從父母安排、未曾反對盲婚而生氣；隨後，聽聞天賜將此視為「天意」，令她更覺其懦弱而憤怒；最後，當天賜以「福分」形容此親事並展現得體言談時，陳盈察覺其真誠敦厚，遂化怒為喜。<br><br>
+                                    <strong>學術評析：</strong>情緒轉折的機制，是陳盈透過步步逼問，完成了對天賜內在品格的實地考察。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-7', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>8. 為甚麼天賜向陳盈致歉？陳盈又為甚麼着急？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-8">
+                                    <strong>答案：</strong>天賜誤以為陳盈借「傘要挑自己喜歡的」來暗示拒婚，故體貼地致歉並表示會收回聘傘。陳盈實際上對天賜已生好感，眼見天賜因誤會而準備放棄退親，恐弄巧反拙、誤了良緣，故此萬分着急。<br><br>
+                                    <strong>學術評析：</strong>戲劇誤會（Misunderstanding）的典型應用，將男女主角推向心靈坦露的邊緣，製造高潮張力。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-8', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>9. 為甚麼天賜和陳盈兩人會不好意思？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-9">
+                                    <strong>答案：</strong>因為天賜在急切之下，脫口說出「永久包修，保用一世」這類具有強烈終身承諾意涵的雙關表白；陳盈聽聞如此直白、溫馨的求婚，兩人都感到害羞與曖昧，現場氛圍頓時無比甜蜜。<br><br>
+                                    <strong>學術評析：</strong>雙關台詞促成了情感的實質性締結，是劇作高潮的核心情感轉折點。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-9', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>10. 為甚麼梁蘇認為陳盈有才華呢？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-10">
+                                    <strong>答案：</strong>因為陳盈事後寄信給天賜，寫下「知否閨中常盼望，莫因風雨誤佳期」之句，詩意優雅，既化用店內口號，又含蓄得體地表達對婚事的殷切盼望，極具文學素養。<br><br>
+                                    <strong>學術評析：</strong>陳盈展現了文雅且具主動智慧的女性才情，深得未來公公的器重與讚許，體現了她的多面性格。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-10', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)">
+                            <span>11. 為甚麼外省人看到「知否家中常盼望，莫因風雨誤歸期」這宣傳口號時都讚歎不已？</span>
+                            <span class="accordion-toggle">▼</span>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-body">
+                                <div id="qa-11">
+                                    <strong>答案：</strong>因為外省商人長年遠赴廣州辦貨，旅途艱辛，思鄉情切。此宣傳口號將雨傘與「歸期」連結，直接擊中他們掛念遠方親人、渴望早日團聚的心理，充滿了濃厚的溫暖人情味，故令人讚歎。<br><br>
+                                    <strong>學術評析：</strong>文學與商業宣傳的完美結合，展現了蘇記遮廠關懷人性的核心精神，體現了「人間有情」的主題。
+                                </div>
+                                <button class="tts-btn" onclick="toggleSpeech('qa-11', this)">🔊 廣東話朗讀</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: 互動小測驗 -->
+            <div id="quiz" class="section">
+                <div class="quiz-container">
+                    <!-- Stage Selection -->
+                    <div id="stageSelection" class="stage-selection">
+                        <div class="stage-card" onclick="startStage(0)" id="stage-card-0">
+                            <span class="stage-status-badge" id="badge-0">未完成</span>
+                            <h3>🎯 第一關</h3>
+                            <p>人物性格與開端情節</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">第 1-10 題</p>
+                        </div>
+                        <div class="stage-card" onclick="startStage(1)" id="stage-card-1">
+                            <span class="stage-status-badge" id="badge-1">未完成</span>
+                            <h3>⚡ 第二關</h3>
+                            <p>雙關言外之意</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">第 11-20 題</p>
+                        </div>
+                        <div class="stage-card" onclick="startStage(2)" id="stage-card-2">
+                            <span class="stage-status-badge" id="badge-2">未完成</span>
+                            <h3>🔥 第三關</h3>
+                            <p>場景切換與舞台指示</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">第 21-30 題</p>
+                        </div>
+                        <div class="stage-card" onclick="startStage(3)" id="stage-card-3">
+                            <span class="stage-status-badge" id="badge-3">未完成</span>
+                            <h3>💥 第四關</h3>
+                            <p>綜合分析與文學比較</p>
+                            <p style="font-size: 0.8rem; margin-top: 0.5rem;">第 31-40 題</p>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Content -->
+                    <div id="quizContent" style="display: none;">
+                        <div class="quiz-header">
+                            <div>
+                                <div class="stage-label" id="stageLabel"></div>
+                                <div class="quiz-progress">第 <span id="currentQuestion">1</span>/10 題</div>
+                            </div>
+                            <span id="scoreDisplay" style="display:none;">得分：<span id="score">0</span>/10</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+
+                        <div class="quiz-question-container">
+                            <div class="quiz-question" id="questionText"></div>
+                            <!-- 題目朗讀按鈕 -->
+                            <button class="tts-btn" id="quizQuestionSpeakBtn" onclick="speakQuizQuestion()">🔊 讀題</button>
+                        </div>
+                        
+                        <div class="quiz-options" id="optionsContainer"></div>
+                        <div class="quiz-feedback" id="feedback"></div>
+                        <div class="quiz-analysis" id="analysis"></div>
+                        <div class="quiz-buttons">
+                            <button class="btn btn-secondary" id="exitQuizBtn" onclick="exitToStageSelection()">退出此關</button>
+                            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>下一題</button>
+                        </div>
+                    </div>
+
+                    <!-- Stage Results -->
+                    <div id="stageResults" style="display: none;">
+                        <div class="results-card">
+                            <h2 id="stageTitle">🎉 第一關完成！</h2>
+                            <div class="results-score" id="stageScore">0 / 10</div>
+                            <div class="results-percentage" id="stagePercentage">答對率：0%</div>
+                            <div class="results-action-group">
+                                <button class="btn btn-primary" id="continueBtn">繼續下一關</button>
+                                <button class="btn btn-secondary" onclick="backToStageSelection()">返回關卡首頁</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Report -->
+                    <div id="finalReport" style="display: none;">
+                        <div class="results-card">
+                            <h2>🏆 恭喜完成全部 40 題挑戰！</h2>
+                            <div class="results-score" id="finalTotalScore">0 / 40</div>
+                            <div class="results-percentage" id="finalTotalPercentage">總答對率：0%</div>
+                            <div class="results-message" id="finalMessage"></div>
+                            <div class="results-action-group">
+                                <button class="btn btn-primary" onclick="restartQuiz()">重新挑戰</button>
+                                <button class="btn btn-secondary" onclick="toggleDetailedAnalysis()">展開/收起題目解析</button>
+                            </div>
+                        </div>
+
+                        <!-- 完整的答題報告系統 -->
+                        <div class="report-section show">
+                            <h3>📊 電子化學習報告</h3>
+                            
+                            <!-- 學生學籍資料展示區 -->
+                            <div class="report-header-box">
+                                <div><strong>學生姓名：</strong><span id="reportStudentName">--</span></div>
+                                <div><strong>就讀班別：</strong><span id="reportStudentClass">--</span></div>
+                                <div><strong>學生學號：</strong><span id="reportStudentNo">--</span></div>
+                                <div><strong>評估時間：</strong><span id="reportTime">--</span></div>
+                            </div>
+
+                            <!-- 視覺化進度條展示各關答對率 -->
+                            <div class="category-analysis">
+                                <h4>各關卡表現分析</h4>
+                                <div id="stagePerformance"></div>
+                            </div>
+
+                            <!-- 強項與弱項分析 -->
+                            <div class="report-grid">
+                                <div class="report-card">
+                                    <h4>🎯 總體表現評價</h4>
+                                    <p id="overallPerformance"></p>
+                                </div>
+                                <div class="report-card">
+                                    <h4>💪 強項領域</h4>
+                                    <p id="strengthArea"></p>
+                                </div>
+                                <div class="report-card">
+                                    <h4>⚠️ 弱項與盲點</h4>
+                                    <p id="weakArea"></p>
+                                </div> <!-- Typo end div fixed here -->
+                            </div>
+
+                            <!-- 弱點分析 + 改善建議 -->
+                            <div class="suggestion-box">
+                                <h4>📚 個性化改善與複習建議</h4>
+                                <ul id="suggestions"></ul>
+                            </div>
+                            
+                            <!-- 額外學習資源推薦 -->
+                            <div class="report-card" style="border-left: 4px solid #e6d5f0; background: #faf8fc; margin-top: 1.5rem;">
+                                <h4>🚀 延伸學習資源推薦</h4>
+                                <p id="resourceRecommendation">我們為您推薦深入研讀杜國威先生其他著名劇作（如《我和春天有個約會》、《南海十三郎》），以此擴大對香港本土情懷、劇作家「港派寫作風格」的理解。您也可以重複點擊上方「重新挑戰」按鈕，直到達成 40/40 的「人間有情大師」最高榮耀！</p>
+                            </div>
+                        </div>
+
+                        <!-- 精美的 40 題答題歷史與對錯分析 -->
+                        <div id="detailedAnalysisBoard" class="detailed-analysis-board">
+                            <h3>📖 40 題完整解析對照表</h3>
+                            <div id="detailedList" class="detailed-list">
+                                <!-- JS 渲染對錯分析 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <span>© 2026 《人間有情》互動學習站 | 中三級中文科教學資源</span>
+        <!-- 隱藏的管理員後台入口小鎖 -->
+        <span class="footer-lock-icon" onclick="openAdminPasswordPrompt()">🔒</span>
+    </footer>
+
+    <!-- Main System Script Block (Self-Contained & Globally Bound) -->
+    <script>
+        // Default Local Configuration fallbacks (Synced to cloud if Firebase is loaded)
+        let adminPassword = "admin888";
+        let familyBypassPassword = "son123";
+        let cloudLockState = "public"; // "public" or "private"
+
+        // Firebase Service Connection Objects
+        let db = null;
+        let auth = null;
+        const defaultAppId = typeof __app_id !== 'undefined' ? __app_id : 'human-warmth-cloudlock';
+
+        // Connect and sync Firestore cloud lock with dynamic modular imports
+        async function connectFirebaseLock() {
+            try {
+                // If configuration is missing (Canvas preview offline testing), fall back instantly to localStorage
+                if (typeof __firebase_config === 'undefined' || !__firebase_config) {
+                    console.log("Operating in 100% Local Sandbox mode.");
+                    loadLocalLockState();
+                    return;
+                }
+
+                // Dynamic Imports to eliminate script race conditions entirely!
+                const firebaseApp = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
+                const firebaseAuth = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
+                const firebaseFirestore = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+
+                const firebaseConfig = JSON.parse(__firebase_config);
+                const app = firebaseApp.initializeApp(firebaseConfig);
+                auth = firebaseAuth.getAuth(app);
+                db = firebaseFirestore.getFirestore(app);
+
+                // Authentication (Rule 3)
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await firebaseAuth.signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await firebaseAuth.signInAnonymously(auth);
+                }
+
+                // Listen to Cloud Lock Config Changes
+                const configDocRef = firebaseFirestore.doc(db, 'artifacts', defaultAppId, 'public', 'data', 'site_config', 'global_status');
+                
+                firebaseFirestore.onSnapshot(configDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        cloudLockState = data.cloudLockState || "public";
+                        adminPassword = data.adminPassword || "admin888";
+                        familyBypassPassword = data.familyBypassPassword || "son123";
+                    } else {
+                        // Document doesn't exist, create it with default public values
+                        saveConfigToCloud("public", adminPassword, familyBypassPassword);
+                    }
+                    applySecurityLocks();
+                }, (err) => {
+                    console.error("Firestore Listen Failed: ", err);
+                    loadLocalLockState();
+                });
+
+            } catch (err) {
+                console.error("Dynamic Firebase connection failed, falling back to Local Storage: ", err);
+                loadLocalLockState();
+            }
+        }
+
+        // Local Storage Sandbox Mode Backups
+        function loadLocalLockState() {
+            cloudLockState = localStorage.getItem('local_cloud_lock_state') || "public";
+            adminPassword = localStorage.getItem('local_admin_password') || "admin888";
+            familyBypassPassword = localStorage.getItem('local_family_bypass_password') || "son123";
+            applySecurityLocks();
+        }
+
+        // Apply visual locks based on Cloud state & bypass cookies
+        function applySecurityLocks() {
+            const hasBypass = localStorage.getItem('family_bypass_unlocked') === 'true';
+            const lockScreen = document.getElementById('cloudLockScreen');
+            
+            if (cloudLockState === "private" && !hasBypass) {
+                lockScreen.style.display = 'flex';
+                stopAllGlobalSpeech();
+            } else {
+                lockScreen.style.display = 'none';
+            }
+
+            // Sync indicators in Admin Console
+            const indicator = document.getElementById('adminStatusIndicator');
+            const btn = document.getElementById('adminToggleBtn');
+            if (indicator && btn) {
+                if (cloudLockState === "public") {
+                    indicator.innerHTML = "🟢 <span style='color:green;'>公開開放模式 (所有人皆可訪問)</span>";
+                    btn.textContent = "🔴 切換為私密鎖定";
+                    btn.style.background = "#f44336";
+                } else {
+                    indicator.innerHTML = "🔴 <span style='color:red;'>私密鎖定模式 (僅家人可進)</span>";
+                    btn.textContent = "🟢 切換為全面開放";
+                    btn.style.background = "#4caf50";
+                }
+                document.getElementById('adminPassInput').value = adminPassword;
+                document.getElementById('familyPassInput').value = familyBypassPassword;
+            }
+        }
+
+        // Save Config Doc Helper (Strict Rule 1)
+        async function saveConfigToCloud(state, adminPass, familyPass) {
+            cloudLockState = state;
+            adminPassword = adminPass;
+            familyBypassPassword = familyPass;
+
+            // Save to LocalStorage for dual sandbox fallback
+            localStorage.setItem('local_cloud_lock_state', state);
+            localStorage.setItem('local_admin_password', adminPass);
+            localStorage.setItem('local_family_bypass_password', familyPass);
+
+            if (db) {
+                try {
+                    const firebaseFirestore = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
+                    const configDocRef = firebaseFirestore.doc(db, 'artifacts', defaultAppId, 'public', 'data', 'site_config', 'global_status');
+                    await firebaseFirestore.setDoc(configDocRef, {
+                        cloudLockState: state,
+                        adminPassword: adminPass,
+                        familyBypassPassword: familyPass,
+                        updatedAt: new Date().toISOString()
+                    }, { merge: true });
+                } catch (e) {
+                    console.error("Error saving cloud config: ", e);
+                }
+            }
+            applySecurityLocks();
+        }
+
+        // Toggle Cloud Lock Switch
+        function toggleCloudLockStatus() {
+            const nextState = cloudLockState === "public" ? "private" : "public";
+            saveConfigToCloud(nextState, adminPassword, familyBypassPassword);
+        }
+
+        // Admin Console Triggers (Explicitly global for onclick reliability)
+        function openAdminPasswordPrompt() {
+            const input = prompt("🔐 請輸入管理員通行密碼：");
+            if (input === null) return;
+            if (input.trim() === adminPassword) {
+                document.getElementById('adminConsoleModal').style.display = 'flex';
+            } else {
+                alert("❌ 密碼錯誤，拒絕訪問控制台！");
+            }
+        }
+
+        function closeAdminConsole() {
+            document.getElementById('adminConsoleModal').style.display = 'none';
+        }
+
+        function saveAdminSettings() {
+            const newAdmin = document.getElementById('adminPassInput').value.trim();
+            const newFamily = document.getElementById('familyPassInput').value.trim();
+            
+            if (!newAdmin || !newFamily) {
+                alert("欄位不能為空！");
+                return;
+            }
+
+            adminPassword = newAdmin;
+            familyBypassPassword = newFamily;
+            
+            saveConfigToCloud(cloudLockState, adminPassword, familyBypassPassword);
+            alert("✅ 設定已成功保存！");
+            closeAdminConsole();
+        }
+
+        function tryFamilyBypass() {
+            const input = prompt("🔑 請輸入您家人/兒子專用解鎖通行密碼：");
+            if (input === null) return;
+            if (input.trim() === familyBypassPassword) {
+                localStorage.setItem('family_bypass_unlocked', 'true');
+                alert("🎉 解鎖成功！已信任本裝置。不論雲端是否鎖定，本裝置將可直接使用本學習站。");
+                applySecurityLocks();
+            } else {
+                alert("❌ 密碼不正確。");
+            }
+        }
+
+        // Student & Login State
+        let loggedInStudent = null;
+
+        // Quiz State
+        let currentStage = -1;
+        let currentQuestionInStage = 0;
+        let stageScores = [0, 0, 0, 0];
+        let allAnswers = [[], [], [], []]; 
+        let answered = false;
+        let stageCompletedFlags = [false, false, false, false];
+
+        // Speech Engine Controller Variables
+        let hasUnlockedAudio = false;
+
+        function initVoiceDiagnostic() {
+            if (!('speechSynthesis' in window)) {
+                updateDiagUI("⚠️ 不支援此瀏覽器 (建議換用 Safari/Chrome)", "red", "#ffeedd");
+                return;
+            }
+
+            window.speechSynthesis.getVoices();
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = () => evaluateVoicesList();
+            } else {
+                evaluateVoicesList();
+            }
+        }
+
+        function evaluateVoicesList() {
+            const voices = window.speechSynthesis.getVoices();
+            const hasCantonese = voices.some(v => 
+                v.lang === 'zh-HK' || 
+                v.lang === 'zh-YUE' || 
+                v.lang.toLowerCase().includes('hong kong') || 
+                v.name.toLowerCase().includes('hong kong')
+            );
+
+            if (hasCantonese) {
+                updateDiagUI("✅ 廣東話語音就緒 (支援流暢朗讀)", "#2e7d32", "#e8f5e9");
+            } else if (voices.length > 0) {
+                updateDiagUI("配備普通話或中文後備 (部分設備未下載廣東話包)", "#f57c00", "#fff3e0");
+            } else {
+                updateDiagUI("⏳ 語音加載中... (點擊下方「測試發聲」以強行喚醒)", "#0288d1", "#e1f5fe");
+            }
+        }
+
+        function testVoiceEngine() {
+            unlockAudioContext();
+            
+            try {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance("廣東話語音測試成功！人間有情，保用一世。");
+                const voices = window.speechSynthesis.getVoices();
+                const hkVoice = voices.find(v => v.lang === 'zh-HK' || v.lang === 'zh-YUE' || v.name.toLowerCase().includes('hong kong'));
+                if (hkVoice) {
+                    utterance.voice = hkVoice;
+                } else {
+                    utterance.lang = 'zh-HK';
+                }
+                utterance.rate = 1.0;
+                
+                window.speechSynthesis.speak(utterance);
+                alert("🔊 系統已在背景發送語音信號！如果您聽到「廣東話語音測試成功」之聲音，則代表音訊一切正常。\n\n如依然無聲，請檢查：\n1. 手機是否切換至「靜音/震動模式」(iPhone側邊靜音切換開關)？\n2. 系統音量是否調大？");
+            } catch (e) {
+                alert("⚠️ 語音啟動失敗，請重新載入網頁再試。錯誤：" + e.message);
+            }
+        }
+
+        function unlockAudioContext() {
+            if (hasUnlockedAudio) return;
+            
+            if ('speechSynthesis' in window) {
+                const unlockUtterance = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(unlockUtterance);
+                hasUnlockedAudio = true;
+            }
+        }
+
+        function toggleSpeech(elementId, btnElement) {
+            unlockAudioContext();
+
+            if (!('speechSynthesis' in window)) {
+                alert("您的瀏覽器暫時不支援 Web Speech API。推薦使用 Apple Safari 或 Google Chrome 瀏覽器作答。");
+                return;
+            }
+
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                if (activeTTSButton === btnElement) {
+                    resetSpeechButton(btnElement);
+                    activeTTSButton = null;
+                    return;
+                } else {
+                    if (activeTTSButton) {
+                        resetSpeechButton(activeTTSButton);
+                    }
+                }
+            }
+
+            const textElement = document.getElementById(elementId);
+            if (!textElement) return;
+            const rawText = textElement.innerHTML;
+            const cleanText = rawText.replace(/<[^>]*>/g, '').replace(/[\*]+/g, '').trim();
+
+            executeSpeech(cleanText, btnElement, '🔊 廣東話朗讀');
+        }
+
+        function executeSpeech(text, btnElement, defaultText) {
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                
+                let matchedVoice = voices.find(v => v.lang === 'zh-HK' || v.lang === 'zh-YUE');
+                if (!matchedVoice) {
+                    matchedVoice = voices.find(v => v.name.toLowerCase().includes('hong kong') || v.lang.toLowerCase().includes('hongkong'));
+                }
+                if (!matchedVoice) {
+                    matchedVoice = voices.find(v => v.lang === 'zh-TW' || v.lang.startsWith('zh'));
+                }
+
+                if (matchedVoice) {
+                    utterance.voice = matchedVoice;
+                } else {
+                    utterance.lang = 'zh-HK';
+                }
+
+                utterance.rate = 0.95;
+                utterance.pitch = 1.0;
+
+                utterance.onend = function() {
+                    btnElement.classList.remove('speaking');
+                    btnElement.innerHTML = defaultText;
+                    activeTTSButton = null;
+                };
+
+                utterance.onerror = function() {
+                    btnElement.classList.remove('speaking');
+                    btnElement.innerHTML = defaultText;
+                    activeTTSButton = null;
+                };
+
+                btnElement.classList.add('speaking');
+                btnElement.innerHTML = '⏹️ 停止播放';
+                activeTTSButton = btnElement;
+
+                window.speechSynthesis.speak(utterance);
+            } catch (err) {
+                console.error("Speech Synthesis Error: ", err);
+                btnElement.classList.remove('speaking');
+                btnElement.innerHTML = defaultText;
+                activeTTSButton = null;
+            }
+        }
+
+        function speakUniversalText() {
+            unlockAudioContext();
+            
+            const textarea = document.getElementById('universalTextarea');
+            const btn = document.getElementById('universalSpeakBtn');
+            const rawText = textarea.value.trim();
+
+            if (!rawText) {
+                alert("請先輸入或貼上任何想要朗讀的任何中文字句！");
+                return;
+            }
+
+            if (!('speechSynthesis' in window)) {
+                alert("抱歉，您的設備不支援語音功能。");
+                return;
+            }
+
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                if (activeTTSButton === btn) {
+                    btn.classList.remove('speaking');
+                    btn.innerHTML = '🔊 開始廣東話朗讀';
+                    activeTTSButton = null;
+                    return;
+                } else if (activeTTSButton) {
+                    if (activeTTSButton.id === 'quizQuestionSpeakBtn') {
+                        activeTTSButton.innerHTML = '🔊 讀題';
+                    } else if (activeTTSButton.id === 'universalSpeakBtn') {
+                        activeTTSButton.innerHTML = '🔊 開始廣東話朗讀';
+                    } else {
+                        activeTTSButton.innerHTML = '🔊 廣東話朗讀';
+                    }
+                    activeTTSButton.classList.remove('speaking');
+                }
+            }
+
+            executeSpeech(rawText, btn, '🔊 開始廣東話朗讀');
+        }
+
+        function clearUniversalText() {
+            stopAllGlobalSpeech();
+            document.getElementById('universalTextarea').value = '';
+        }
+
+        function resetSpeechButton(btn) {
+            btn.classList.remove('speaking');
+            btn.innerHTML = '🔊 廣東話朗讀';
+        }
+
+        function speakQuizQuestion() {
+            unlockAudioContext();
+            
+            const btn = document.getElementById('quizQuestionSpeakBtn');
+            const qText = document.getElementById('questionText').textContent;
+            
+            if (!('speechSynthesis' in window)) return;
+
+            if (window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+                if (activeTTSButton === btn) {
+                    btn.classList.remove('speaking');
+                    btn.innerHTML = '🔊 讀題';
+                    activeTTSButton = null;
+                    return;
+                } else if (activeTTSButton) {
+                    if (activeTTSButton.id === 'universalSpeakBtn') {
+                        activeTTSButton.innerHTML = '🔊 開始廣東話朗讀';
+                    } else {
+                        resetSpeechButton(activeTTSButton);
+                    }
+                    activeTTSButton.classList.remove('speaking');
+                }
+            }
+
+            executeSpeech(qText, btn, '🔊 讀題');
+        }
+
+        function stopAllGlobalSpeech() {
+            if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+                window.speechSynthesis.cancel();
+            }
+            if (activeTTSButton) {
+                if (activeTTSButton.id === 'quizQuestionSpeakBtn') {
+                    activeTTSButton.innerHTML = '🔊 讀題';
+                } else if (activeTTSButton.id === 'universalSpeakBtn') {
+                    activeTTSButton.innerHTML = '🔊 開始廣東話朗讀';
+                } else {
+                    resetSpeechButton(activeTTSButton);
+                }
+                activeTTSButton.classList.remove('speaking');
+                activeTTSButton = null;
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            unlockAudioContext();
+
+            const name = document.getElementById('studentName').value.trim();
+            const cls = document.getElementById('studentClass').value;
+            const sno = document.getElementById('studentNo').value.trim();
+            const errorBox = document.getElementById('loginError');
+
+            if (!name || !cls || !sno) {
+                errorBox.textContent = "⚠️ 請填寫所有必填欄位！";
+                errorBox.style.display = "block";
+                return;
+            }
+
+            loggedInStudent = { name, class: cls, sno };
+            errorBox.style.display = "none";
+            
+            document.getElementById('loginSection').style.display = "none";
+            document.getElementById('mainContent').style.display = "block";
+            
+            document.getElementById('studentWelcome').innerHTML = `👤 歡迎您：<strong>中三 ${cls} 班 (${sno} 號) ${name}</strong> 同學`;
+            
+            initVoiceDiagnostic();
+            switchSection('highlights');
+        }
+
+        function handleLogout() {
+            if (confirm("🚪 您確定要登出系統嗎？當前的小測答題記錄將被清空。")) {
+                stopAllGlobalSpeech();
+                loggedInStudent = null;
+                restartQuiz();
+                
+                document.getElementById('mainContent').style.display = "none";
+                document.getElementById('loginSection').style.display = "flex";
+                document.getElementById('studentName').value = "";
+                document.getElementById('studentNo').value = "";
+            }
+        }
+
+        function switchSection(section) {
+            if (!loggedInStudent) return;
+            
+            stopAllGlobalSpeech();
+
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            const activeNavBtn = document.getElementById(`nav-${section}`);
+            if (activeNavBtn) activeNavBtn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAccordion(header) {
+            stopAllGlobalSpeech();
+            
+            const content = header.nextElementSibling;
+            const isActive = header.classList.contains('active');
+            
+            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+            document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('active'));
+            
+            if (!isActive) {
+                header.classList.add('active');
+                content.classList.add('active');
+            }
+        }
+
+        function startStage(stageIndex) {
+            stopAllGlobalSpeech();
+            currentStage = stageIndex;
+            currentQuestionInStage = 0;
+            answered = false;
+            
+            stageScores[stageIndex] = 0;
+            allAnswers[stageIndex] = [];
+            
+            document.getElementById('stageSelection').style.display = 'none';
+            document.getElementById('quizContent').style.display = 'block';
+            document.getElementById('stageResults').style.display = 'none';
+            document.getElementById('finalReport').style.display = 'none';
+            
+            document.getElementById('stageLabel').textContent = `${stageEmojis[stageIndex]} ${stageNames[stageIndex]}`;
+            document.getElementById('scoreDisplay').style.display = 'inline';
+            
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQuestionInStage >= 10) {
+                showStageResults();
+                return;
+            }
+
+            answered = false;
+            const stageData = Object.values(quizData)[currentStage];
+            const q = stageData[currentQuestionInStage];
+            
+            document.getElementById('questionText').textContent = q.question;
+            
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('div');
+                btn.className = 'quiz-option';
+                btn.textContent = option;
+                btn.onclick = () => selectAnswer(index);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('analysis').classList.remove('show');
+            document.getElementById('nextBtn').disabled = true;
+            
+            const speakBtn = document.getElementById('quizQuestionSpeakBtn');
+            speakBtn.classList.remove('speaking');
+            speakBtn.innerHTML = '🔊 讀題';
+            
+            updateProgress();
+            updateScore();
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const stageData = Object.values(quizData)[currentStage];
+            const q = stageData[currentQuestionInStage];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('feedback');
+            const analysis = document.getElementById('analysis');
+            const nextBtn = document.getElementById('nextBtn');
+
+            options.forEach((opt, i) => {
+                opt.classList.add('disabled');
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                }
+                if (i === index && i !== q.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            const isCorrect = index === q.correct;
+
+            if (isCorrect) {
+                stageScores[currentStage]++;
+                feedback.textContent = '✅ 答對了！';
+                feedback.classList.add('correct');
+            } else {
+                feedback.textContent = '❌ 答錯了，正確答案已標示。';
+                feedback.classList.add('incorrect');
+            }
+            feedback.classList.add('show');
+
+            analysis.innerHTML = `<h4>📚 難度與考點解析</h4><p>${q.analysis}</p>`;
+            analysis.classList.add('show');
+
+            allAnswers[currentStage].push({
+                question: q.question,
+                options: q.options,
+                userAnswer: index,
+                correct: q.correct,
+                analysis: q.analysis,
+                isCorrect: isCorrect
+            });
+
+            nextBtn.disabled = false;
+            updateScore();
+        }
+
+        function nextQuestion() {
+            stopAllGlobalSpeech();
+            currentQuestionInStage++;
+            loadQuestion();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionInStage) / 10) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionInStage + 1;
+        }
+
+        function updateScore() {
+            document.getElementById('score').textContent = stageScores[currentStage];
+        }
+
+        function showStageResults() {
+            stopAllGlobalSpeech();
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('stageResults').style.display = 'block';
+            
+            const score = stageScores[currentStage];
+            const percentage = Math.round((score / 10) * 100);
+            
+            stageCompletedFlags[currentStage] = true;
+            updateStageCardsUI();
+
+            document.getElementById('stageTitle').textContent = `🎉 ${stageNames[currentStage]}完成！`;
+            document.getElementById('stageScore').textContent = `${score} / 10`;
+            document.getElementById('stagePercentage').textContent = `本關答對率：${percentage}%`;
+            
+            const continueBtn = document.getElementById('continueBtn');
+            const allFinished = stageCompletedFlags.every(flag => flag === true);
+
+            if (allFinished) {
+                continueBtn.textContent = '🎓 生成總學習報告';
+                continueBtn.onclick = function() { showFinalReport(); };
+            } else if (currentStage < 3) {
+                continueBtn.textContent = `🚀 挑戰下一關：${stageEmojis[currentStage + 1]}`;
+                continueBtn.onclick = function() { continueToNextStage(); };
+            } else {
+                continueBtn.textContent = '🔙 返回關卡首頁挑戰其他關';
+                continueBtn.onclick = function() { backToStageSelection(); };
+            }
+        }
+
+        function continueToNextStage() {
+            currentQuestionInStage = 0;
+            startStage(currentStage + 1);
+        }
+
+        function exitToStageSelection() {
+            if (confirm("您確定要退出當前關卡嗎？已答題目的得分將不會被記錄。")) {
+                stopAllGlobalSpeech();
+                backToSelectionInternal();
+            }
+        }
+
+        function backToSelectionInternal() {
+            currentStage = -1;
+            currentQuestionInStage = 0;
+            document.getElementById('stageSelection').style.display = 'grid';
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('stageResults').style.display = 'none';
+            document.getElementById('finalReport').style.display = 'none';
+            updateStageCardsUI();
+        }
+
+        function backToStageSelection() {
+            stopAllGlobalSpeech();
+            backToSelectionInternal();
+        }
+
+        function updateStageCardsUI() {
+            for (let i = 0; i < 4; i++) {
+                const card = document.getElementById(`stage-card-${i}`);
+                const badge = document.getElementById(`badge-${i}`);
+                if (stageCompletedFlags[i]) {
+                    card.classList.add('completed');
+                    badge.textContent = `得分: ${stageScores[i]}/10`;
+                    badge.style.background = 'rgba(0, 0, 0, 0.2)';
+                } else {
+                    card.classList.remove('completed');
+                    badge.textContent = "未完成";
+                    badge.style.background = 'rgba(255, 255, 255, 0.25)';
+                }
+            }
+        }
+
+        function showFinalReport() {
+            stopAllGlobalSpeech();
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('stageResults').style.display = 'none';
+            document.getElementById('finalReport').style.display = 'block';
+            
+            const totalScore = stageScores.reduce((a, b) => a + b, 0);
+            const totalPercentage = Math.round((totalScore / 40) * 100);
+            
+            document.getElementById('finalTotalScore').textContent = `${totalScore} / 40`;
+            document.getElementById('finalTotalPercentage').textContent = `總答對率：${totalPercentage}%`;
+            
+            if (loggedInStudent) {
+                document.getElementById('reportStudentName').textContent = loggedInStudent.name;
+                document.getElementById('reportStudentClass').textContent = `中三 ${loggedInStudent.class} 班`;
+                document.getElementById('reportStudentNo').textContent = `${loggedInStudent.sno} 號`;
+                
+                const options = { timeZone: 'Asia/Hong_Kong', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                const formatter = new Intl.DateTimeFormat('zh-HK', options);
+                document.getElementById('reportTime').textContent = formatter.format(new Date());
+            }
+
+            let message = '';
+            if (totalPercentage >= 90) {
+                message = '🌟 【卓越表現】神級大師！你對《人間有情》的細節掌控及語帶雙關等意象理解已臻爐火純青的「專家水平」！你成功參透了杜國威編劇筆下的深情寄意與傳統文化中高尚的人情味美德，真是中文科的課文解讀強者！';
+            } else if (totalPercentage >= 80) {
+                message = '🎉 【優秀成績】實力深厚！你非常出色地掌握了課文的主要內容及戲劇結構、情節變化與核心雙關詞意，離完美境界僅有一步之遙。再接再厲複習錯題，你一定能達成滿分！';
+            } else if (totalPercentage >= 70) {
+                message = '👍 【良好表現】基礎扎實！你對這篇課本的核心重點及問答庫有很好的掌握。對於一些文學比較與深層舞台指示則稍有盲點，建議細看下方的解析，讓實力百尺竿頭，更進一步！';
+            } else if (totalPercentage >= 60) {
+                message = '📖 【及格成績】合格水平！你對人物性格和基本情節有一定的印象，但面對部分雙關隱喻及難度較高的綜合題則略顯吃力。建議再次參照問答庫進行反覆熟悉，必能獲得顯著進步！';
+            } else {
+                message = '💪 【需要加油】仍需努力！目前成績顯示你在《人間有情》的綜合分析中存在較多不確定的盲點。這份試卷包含許多地獄級考題，請勿氣餒！強烈建議先到「課文重點整理」與「課文問答庫」專區潛心閱讀，然後重新挑戰！';
+            }
+            
+            document.getElementById('finalMessage').textContent = message;
+            
+            generatePerformanceReport(totalScore, totalPercentage);
+            buildDetailedList();
+        }
+
+        function generatePerformanceReport(totalScore, totalPercentage) {
+            let stagePerformanceHTML = '';
+            stageScores.forEach((score, index) => {
+                const percentage = Math.round((score / 10) * 100);
+                stagePerformanceHTML += `
+                    <div class="category-bar">
+                        <div class="category-name">${stageEmojis[index]} ${stageNames[index]}</div>
+                        <div class="category-progress">
+                            <div class="category-progress-fill" style="width: ${percentage}%">${percentage}%</div>
+                        </div>
+                        <div class="category-score">${score}/10</div>
+                    </div>
+                `;
+            });
+            document.getElementById('stagePerformance').innerHTML = stagePerformanceHTML;
+            
+            let overallText = '';
+            if (totalPercentage >= 90) {
+                overallText = '您在四個關卡的測試中表現完美無缺！不論是極高難度的文學名作比較，還是細膩如絲的人物內在心理活動、舞台燈光音效指示，您都應付自如。您充分具備極高層次的文學鑒賞與分析能力。';
+            } else if (totalPercentage >= 80) {
+                overallText = '您的表現非常值得肯定！在大多數的情節解析、雙關語言外之意上都具備極佳的靈敏度。主要失分之處僅局限於少量深層對話意象和文體特徵比較。';
+            } else if (totalPercentage >= 70) {
+                overallText = '您具備穩健的課本基礎。在直觀的人物形象分析和故事情節梳理上表現較好，但若要衝刺更高難度，則需加強對潛台詞語義、舞台說明隱性暗示細節的提煉。';
+            } else {
+                overallText = '您的知識結構中尚有部分碎片化的理解偏誤。建議以「梁天賜」與「陳盈」的情感線索為依歸，重新將情節開端、發展、高潮、結局的四個階段在腦中梳理一遍，尤其是雙關台詞的對照。';
+            }
+            document.getElementById('overallPerformance').textContent = overallText;
+            
+            const stagePercentages = stageScores.map(score => Math.round((score / 10) * 100));
+            const maxPercentage = Math.max(...stagePercentages);
+            const minPercentage = Math.min(...stagePercentages);
+            
+            const maxStageIndexes = [];
+            const minStageIndexes = [];
+            stagePercentages.forEach((p, idx) => {
+                if (p === maxPercentage) maxStageIndexes.push(idx);
+                if (p === minPercentage) minStageIndexes.push(idx);
+            });
+            
+            const mainStrengthIdx = maxStageIndexes[0];
+            document.getElementById('strengthArea').textContent = `【${stageNames[mainStrengthIdx]}】（表現為 ${maxPercentage}%）。您在此領域展現出絕佳的文本精讀本領，對此範圍的細節過目不忘，理解能力一流！`;
+            
+            const mainWeakIdx = minStageIndexes[0];
+            let weakText = `【${stageNames[mainWeakIdx]}】（表現為 ${minPercentage}%）。`;
+            if (minPercentage === 100) {
+                weakText += '無懈可擊！您在此關卡同樣獲得了 100% 的滿分表現，無明顯盲點。';
+            } else {
+                weakText += '這說明該部分的知識儲備或題型熟練度相對較低，是您奪取滿分的核心提分突破點，強烈建議重點攻關。';
+            }
+            document.getElementById('weakArea').textContent = weakText;
+            
+            let suggestions = [];
+            
+            if (stageScores[0] < 8) {
+                suggestions.push('<strong>第一關提分突破</strong>：重讀課文的前 10 個段落。試著在筆記本上分欄寫下「天賜」與「陳盈」各自的對話風格（如天賜的躊躇木訥與陳盈的直爽步步緊逼），深刻體會劇作家如何利用這種互補性格營造出渾然天成的矛盾衝突美。');
+            }
+            if (stageScores[1] < 8) {
+                suggestions.push('<strong>第二關提分突破</strong>：雙關語是本課核心。「永久包修，保用一世」、「看傘還是看人」、「真是送來的最好」，請將這些核心對話反覆誦讀，領會其表層商業語意與深層的情感盟誓承諾，並掌握考試中雙關題目的解題模式（即：先答表層，再答深層暗示）。');
+            }
+            if (stageScores[2] < 8) {
+                suggestions.push('<strong>第三關提分突破</strong>：特別留意課文中的括號文字！舞台說明中的「燈光漸暗」、「音樂輕輕襯底」絕非擺設，而是推動時空流轉的重要戲劇工具。學會分辨「交代道具、描繪內心、切換時空、營造氛圍」這四大舞台說明的核心作用。');
+            }
+            if (stageScores[3] < 8) {
+                suggestions.push('<strong>第四關提分突破</strong>：複習文體特性之對比。明白劇本是「由外顯內」（透過台詞與舞台說明來彰顯人物內心），而小說《孔明借箭》則是「以筆傳情」（透過敘事者的細膩描摹渲染氣氛）。理解杜國威筆下「港式溫情劇」的人情味主旨，並與老舍《茶館》的宏大社會批判劇作區分。');
+            }
+
+            if (suggestions.length === 0) {
+                suggestions.push('🌟 <strong>完美守護</strong>：您的所有關卡均答對 8 題以上！建議進一步對照下方的「40 條完整解析對照表」，查閱極少數做錯題目的難度解析，以完全消除知識死角，邁向語文王座。');
+            } else {
+                suggestions.push('💡 <strong>通識學習貼士</strong>：在作答雙關、隱喻這類題目時，務必牢記「字面意義 + 潛台詞寓意」雙軌並重的答題完整性原則。');
+            }
+            
+            let suggestionsHTML = '';
+            suggestions.forEach(suggestion => {
+                suggestionsHTML += `<li>${suggestion}</li>`;
+            });
+            document.getElementById('suggestions').innerHTML = suggestionsHTML;
+        }
+
+        function buildDetailedList() {
+            const listContainer = document.getElementById('detailedList');
+            listContainer.innerHTML = '';
+            
+            let globalQIndex = 1;
+            
+            for (let sIdx = 0; sIdx < 4; sIdx++) {
+                const sAnswers = allAnswers[sIdx];
+                const sData = Object.values(quizData)[sIdx];
+                
+                const stageHeader = document.createElement('div');
+                stageHeader.style.fontWeight = 'bold';
+                stageHeader.style.color = '#87ceeb';
+                stageHeader.style.marginTop = '1rem';
+                stageHeader.style.paddingBottom = '0.3rem';
+                stageHeader.style.borderBottom = '2px solid #f0f8ff';
+                stageHeader.textContent = `${stageEmojis[sIdx]} ${stageNames[sIdx]}`;
+                listContainer.appendChild(stageHeader);
+
+                for (let qIdx = 0; qIdx < 10; qIdx++) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'detailed-item';
+                    
+                    const userRecord = sAnswers[qIdx];
+                    const originalQObj = sData[qIdx];
+                    
+                    let userAnsText = "無（未答）";
+                    let isCorrect = false;
+                    
+                    if (userRecord) {
+                        userAnsText = userRecord.options[userRecord.userAnswer];
+                        isCorrect = userRecord.isCorrect;
+                    }
+                    
+                    const correctAnsText = originalQObj.options[originalQObj.correct];
+                    
+                    itemDiv.innerHTML = `
+                        <div class="detailed-item-q">${globalQIndex}. ${originalQObj.question}</div>
+                        <div class="detailed-item-ans-line">
+                            <span>您的選擇：</span>
+                            <span class="${isCorrect ? 'text-correct' : 'text-incorrect'}">${userAnsText} ${isCorrect ? '✓' : '✗'}</span>
+                        </div>
+                        ${!isCorrect ? `
+                        <div class="detailed-item-ans-line">
+                            <span>正確答案：</span>
+                            <span class="text-correct">${correctAnsText}</span>
+                        </div>
+                        ` : ''}
+                        <div class="detailed-item-exp">
+                            <strong>名師解析：</strong>${originalQObj.analysis}
+                        </div>
+                    `;
+                    
+                    listContainer.appendChild(itemDiv);
+                    globalQIndex++;
+                }
+            }
+        }
+
+        function toggleDetailedAnalysis() {
+            const board = document.getElementById('detailedAnalysisBoard');
+            if (board.style.display === 'none' || board.style.display === '') {
+                board.style.display = 'block';
+                board.scrollIntoView({ behavior: 'smooth' });
+            } else {
+                board.style.display = 'none';
+            }
+        }
+
+        function restartQuiz() {
+            stopAllGlobalSpeech();
+            currentStage = -1;
+            currentQuestionInStage = 0;
+            stageScores = [0, 0, 0, 0];
+            allAnswers = [[], [], [], []];
+            answered = false;
+            stageCompletedFlags = [false, false, false, false];
+            
+            document.getElementById('stageSelection').style.display = 'grid';
+            document.getElementById('quizContent').style.display = 'none';
+            document.getElementById('stageResults').style.display = 'none';
+            document.getElementById('finalReport').style.display = 'none';
+            document.getElementById('detailedAnalysisBoard').style.display = 'none';
+            updateStageCardsUI();
+        }
+
+        // Exposing modular function scopes cleanly to browser window contexts!
+        window.openAdminPasswordPrompt = openAdminPasswordPrompt;
+        window.closeAdminConsole = closeAdminConsole;
+        window.saveAdminSettings = saveAdminSettings;
+        window.toggleCloudLockStatus = toggleCloudLockStatus;
+        window.tryFamilyBypass = tryFamilyBypass;
+        window.toggleSpeech = toggleSpeech;
+        window.speakUniversalText = speakUniversalText;
+        window.clearUniversalText = clearUniversalText;
+        window.testVoiceEngine = testVoiceEngine;
+        window.handleLogin = handleLogin;
+        window.handleLogout = handleLogout;
+        window.switchSection = switchSection;
+        window.toggleAccordion = toggleAccordion;
+        window.startStage = startStage;
+        window.exitToStageSelection = exitToStageSelection;
+        window.nextQuestion = nextQuestion;
+        window.backToStageSelection = backToStageSelection;
+        window.speakQuizQuestion = speakQuizQuestion;
+        window.restartQuiz = restartQuiz;
+        window.toggleDetailedAnalysis = toggleDetailedAnalysis;
+
+        // Global Window Touch/Click hook to trigger Audio Unlock
+        document.addEventListener('click', function() {
+            unlockAudioContext();
+        });
+
+        // DOM Loaded Initializer
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStageCardsUI();
+            connectFirebaseLock();
+        });
+    </script>
+</body>
+</html>
